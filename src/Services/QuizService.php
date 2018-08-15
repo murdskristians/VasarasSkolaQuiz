@@ -90,12 +90,12 @@ class QuizService
      */
     public function submitAnswer(int $userId, int $questionId, int $answerId)
     {
-        $answeToSave = new UserAnswerModel;
-        $answeToSave->userId = $userId;
-        $answeToSave->quizId = $questionId;
-        $answeToSave->answerId = $answerId;
+        $answerToSave = new UserAnswerModel;
+        $answerToSave->userId = $userId;
+        $answerToSave->quizId = $questionId;
+        $answerToSave->answerId = $answerId;
 
-        $this->userAnswers->saveAnswer($answeToSave);
+        $this->userAnswers->saveAnswer($answerToSave);
     }
     /**
      * Check if user has answered all questions for this quiz (correct or incorrect)
