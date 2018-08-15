@@ -6,6 +6,7 @@ use Quiz\Models\AnswersModel;
 use Quiz\Models\QuestionModel;
 use Quiz\Models\QuizModel;
 use Quiz\Models\UserAnswerModel;
+use Quiz\Models\UserModel;
 use Quiz\QuizService;
 use Quiz\Repositories\QuizRepository;
 use Quiz\Repositories\UserAnswerRepository;
@@ -217,6 +218,18 @@ class QuizTest extends TestCase
         self::assertEquals(3, $answerFound->questionId);
     }
 
+    public function testUserSaveOrCreate()
+    {
+        $repo = new UserRepository();
+
+        $user = new UserModel(1, 'Kristians');
+
+        $repo->saveOrCreate($user);
+
+        $testResult = $repo->getById(1);
+        self::assertEquals('Kristians', $testResult->name);
+
+    }
 //    function testStuff()
 //    {
 //        $userAnswerRepo = new UserAnswerRepository;

@@ -1,8 +1,9 @@
 <?php
 namespace Quiz;
-use Quiz\Models\AnswerModel;
+use Quiz\Models\AnswersModel;
 use Quiz\Models\QuestionModel;
 use Quiz\Models\QuizModel;
+use Quiz\Models\UserAnswerModel;
 use Quiz\Models\UserModel;
 use Quiz\Repositories\QuizRepository;
 use Quiz\Repositories\UserAnswerRepository;
@@ -41,8 +42,10 @@ class QuizService
      */
     public function registerUser(string $name): UserModel
     {
-        $this->user->name=$name;
-        $this->user->saveOrCreate($this->user);
+        $user = new UserModel;
+        $user->name = $name;
+
+        return $user;
     }
 
     /**
@@ -72,7 +75,7 @@ class QuizService
      * Get list of available answers for this question
      *
      * @param int $questionId
-     * @return AnswerModel[]
+     * @return AnswersModel[]
      */
     public function getAnswers(int $questionId): array
     {
@@ -85,11 +88,11 @@ class QuizService
      * @param int $questionId
      * @param int $answerId
      */
-    public function submitAnswer(int $userId, int $quizId, int $answerId)
+    public function submitAnswer(int $userId, int $questionId, int $answerId)
     {
         $answeToSave = new UserAnswerModel;
         $answeToSave->userId = $userId;
-        $answeToSave->quizId = $quizId;
+        $answeToSave->quizId = $questionId;
         $answeToSave->answerId = $answerId;
 
         $this->userAnswers->saveAnswer($answeToSave);
@@ -119,6 +122,11 @@ class QuizService
      */
     public function getScore(int $userId, int $quizId): int
     {
+        if(!$this->isQuizCompleted($userId, $quizId))
+        {
+            return 0;
+        }
+
         /** @var int $result */
         $result = 0;
 
@@ -131,7 +139,7 @@ class QuizService
         /** @var int $quizQuestionCount */
         $quizQuestionCount = count($quizQuestions);
 
-        /** @var  AnswerModel[] */
+        /** @var  AnswersModel[] */
         $quizAnswers = [];
 
         // Retrieval of question answers
