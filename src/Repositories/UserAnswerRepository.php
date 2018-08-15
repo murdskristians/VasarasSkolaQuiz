@@ -18,10 +18,10 @@ class UserAnswerRepository
 
     public function getAnswers(int $userId, int $quiz): array
     {
-        $result = array();
+        $result = [];
 
         foreach ($this->answers as $answer) {
-            if ($answer->userId == $userId && $answer->quizId) {
+            if ($answer->userId == $userId && $answer->quizId == $quiz) {
                 $result[] = $answer;
             }
         }

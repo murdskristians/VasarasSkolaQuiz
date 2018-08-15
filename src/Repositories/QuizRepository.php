@@ -32,7 +32,7 @@ class QuizRepository
 
     public function getList(): array
     {
-        $list = array();
+        $list = [];
         foreach ($this->quizes as $quiz) {
             $list[] = $quiz;
         }
@@ -51,7 +51,7 @@ class QuizRepository
 
     public function getQuestions(int $quizId): array
     {
-        $result = array();
+        $result = [];
 
         foreach ($this->questions as $question) {
             if ($question->quizId == $quizId) {

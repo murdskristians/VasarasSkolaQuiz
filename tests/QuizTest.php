@@ -6,13 +6,16 @@ use Quiz\Models\AnswersModel;
 use Quiz\Models\QuestionModel;
 use Quiz\Models\QuizModel;
 use Quiz\Models\UserAnswerModel;
+use Quiz\QuizService;
 use Quiz\Repositories\QuizRepository;
 use Quiz\Repositories\UserAnswerRepository;
+use Quiz\Repositories\UserRepository;
 
 class QuizTest extends TestCase
 {
     /** @var QuizRepository */
     private $quizRepository;
+
     public function setUp()
     {
         parent::setUp();
@@ -62,7 +65,7 @@ class QuizTest extends TestCase
 
                 $this->quizRepository->addQuestion($question);
 
-                foreach($answers as $answerText => $isCorrect){
+                foreach ($answers as $answerText => $isCorrect) {
                     $a = new AnswersModel;
                     $a->id = ++$answerIds;
                     $a->answer = $answerText;
@@ -94,7 +97,7 @@ class QuizTest extends TestCase
         $repo->saveAnswer($answer);
 
         //paprasam quiz id iesniegtās atbildes no repositorija.
-        $answersFound = $repo->getAnswers(111,222);
+        $answersFound = $repo->getAnswers(111, 222);
 
         //Paņemam pirmo masīva elementu
         $answerFound = array_shift($answersFound);
@@ -102,4 +105,78 @@ class QuizTest extends TestCase
         //Pārbaudam
         self::assertEquals($answer, $answerFound);
     }
+
+    function testAddAndGetQuizzes()
+    {
+        $repo = new QuizRepository();
+        $quiz = new QuizModel();
+
+        $quiz ->name = "Latvia";
+        $repo->addQuiz($quiz );
+
+        $quiz ->name = "Estonia";
+        $repo->addQuiz($quiz );
+
+        $testResult = $repo->getList();
+        $answerFound = reset($testResult);
+
+        self::assertEquals("Estonia", $answerFound->name);
+    }
+
+    function testAddAndGetQuestion()
+    {
+        $repo = new QuizRepository();
+
+        $question = new QuestionModel();
+        $question->quizId = 3;
+        $question->question = "Capital of Latvia?";
+
+        $repo->addQuestion($question);
+
+        $testResult = $repo->getQuestions(3);
+        $answerFound = reset($testResult);
+
+        self::assertEquals("Capital of Latvia?", $answerFound->question);
+        self::assertEquals(3, $answerFound->quizId);
+    }
+
+    function testAddAndGetAnswers()
+    {
+        $repo = new UserAnswerRepository();
+
+        $answer = new UserAnswerModel();
+        $answer->userId = 1;
+        $answer->quizId = 3;
+        $answer->answerId = 5;
+        $answer->questionId = 3;
+
+
+        $repo->saveAnswer($answer);
+
+        $testResult = $repo->getAnswers(1, 3);
+        $answerFound = reset($testResult);
+
+        self::assertEquals(1, $answerFound->userId);
+        self::assertEquals(3, $answerFound->quizId);
+        self::assertEquals(5, $answerFound->answerId);
+        self::assertEquals(3, $answerFound->questionId);
+    }
+//    function testStuff()
+//    {
+//        $userAnswerRepo = new UserAnswerRepository;
+//        $userRepo = new UserRepository;
+//        $quizRepo = new QuizRepository;
+//
+//        $service = new QuizService($quizRepo, $userRepo, $userAnswerRepo);
+//
+//        // Add a quiz model to repository
+//        $quiz = new QuizModel; // TODO set multiple properties
+//        $quizRepo->addQuiz($quiz);
+//
+//        // Check if service returns the quiz
+//        $quizes = $service->getQuizes();
+//
+//        $answerFound = array_shift($quizes);
+//        self::assertCount(1, $answerFound);
+//    }
 }
