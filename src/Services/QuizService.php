@@ -119,6 +119,40 @@ class QuizService
      */
     public function getScore(int $userId, int $quizId): int
     {
-        // TODO implement
+        /** @var int $result */
+        $result = 0;
+
+        /** @var UserAnswerModel[] */
+        $userAnswers = $this->userAnswers->getAnswers($userId, $quizId);
+
+        /** @var QuestionModel[] */
+        $quizQuestions = $this->quizes->getQuestions($quizId);
+
+        /** @var int $quizQuestionCount */
+        $quizQuestionCount = count($quizQuestions);
+
+        /** @var  AnswerModel[] */
+        $quizAnswers = [];
+
+        // Retrieval of question answers
+        foreach ($quizQuestions as $quizQuestion) {
+            $questionAnswers = $this->quizes->getAnswers($quizQuestion->id);
+
+            foreach ($questionAnswers as $questionAnswer) {
+                $quizAnswers[] = $questionAnswer;
+            }
+        }
+
+        foreach ($userAnswers as $userAnswer) {
+            foreach ($quizAnswers as $quizAnswer) {
+                if ($userAnswer->answerId == $quizAnswer->id) {
+                    if ($quizAnswer->isCorrect()) {
+                        $result++;
+                    }
+                }
+            }
+        }
+
+        return round(($result / $quizQuestionCount) * 100);
     }
 }

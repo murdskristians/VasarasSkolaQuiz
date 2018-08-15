@@ -109,18 +109,28 @@ class QuizTest extends TestCase
     function testAddAndGetQuizzes()
     {
         $repo = new QuizRepository();
-        $quiz = new QuizModel();
 
+        $quiz = new QuizModel();
         $quiz ->name = "Latvia";
         $repo->addQuiz($quiz );
 
-        $quiz ->name = "Estonia";
-        $repo->addQuiz($quiz );
+        $newQuiz = new QuizModel();
+        $newQuiz ->name = "Estonia";
+        $repo->addQuiz($newQuiz );
+
+        $newQuiz2 = new QuizModel();
+        $newQuiz2 ->name = "Lithuania";
+        $repo->addQuiz($newQuiz2);
 
         $testResult = $repo->getList();
-        $answerFound = reset($testResult);
 
-        self::assertEquals("Estonia", $answerFound->name);
+        $quiz1 = array_shift($testResult);
+        $quiz2 = array_shift($testResult);
+        $quiz3 = array_shift($testResult);
+
+        self::assertEquals("Latvia", $quiz1->name);
+        self::assertEquals("Estonia", $quiz2->name);
+        self::assertEquals("Lithuania", $quiz3->name);
     }
 
     function testAddAndGetQuestion()
@@ -140,7 +150,52 @@ class QuizTest extends TestCase
         self::assertEquals(3, $answerFound->quizId);
     }
 
-    function testAddAndGetAnswers()
+    function testSaveAndGetAnswersForQuiz()
+    {
+        $repo = new QuizRepository();
+
+        $answer = new AnswersModel();
+        $answer->answer= "perfect test";
+        $answer->questionId = 3;
+        $answer->isCorrect = 1;
+        $answer->userId = 3;
+
+
+        $repo->addAnswers($answer);
+
+        $testResult = $repo->getAnswers(3);
+        $answerFound = reset($testResult);
+
+        self::assertEquals("perfect test", $answerFound->answer);
+        self::assertEquals(3, $answerFound->questionId);
+        self::assertEquals(1, $answerFound->isCorrect);
+        self::assertEquals(3, $answerFound->userId);
+    }
+
+    function testGetById(){
+        $repo = new QuizRepository();
+
+        $quiz = new QuizModel();
+        $quiz ->id = 1;
+        $quiz ->name = "Latvia";
+        $repo->addQuiz($quiz );
+
+        $newQuiz = new QuizModel();
+        $newQuiz ->id = 2;
+        $newQuiz ->name = "Estonia";
+        $repo->addQuiz($newQuiz );
+
+        $newQuiz2 = new QuizModel();
+        $newQuiz2 ->id = 3;
+        $newQuiz2 ->name = "Lithuania";
+        $repo->addQuiz($newQuiz2);
+
+        $testResult = $repo->getById(2);
+
+        self::assertEquals("Estonia", $testResult->name);
+    }
+
+    function testSaveAndGetAnswersForUser()
     {
         $repo = new UserAnswerRepository();
 
@@ -161,6 +216,7 @@ class QuizTest extends TestCase
         self::assertEquals(5, $answerFound->answerId);
         self::assertEquals(3, $answerFound->questionId);
     }
+
 //    function testStuff()
 //    {
 //        $userAnswerRepo = new UserAnswerRepository;

@@ -13,7 +13,6 @@ class UserAnswerRepository
     public function saveAnswer(UserAnswerModel $answer)
     {
         $this->answers[] = $answer;
-
     }
 
     public function getAnswers(int $userId, int $quiz): array

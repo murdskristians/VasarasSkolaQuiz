@@ -30,6 +30,9 @@ class QuizRepository
         $this->answers[] = $answer;
     }
 
+    /**
+     * @return QuizModel[]
+     */
     public function getList(): array
     {
         $list = [];
