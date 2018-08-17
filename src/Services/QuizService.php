@@ -129,16 +129,12 @@ class QuizService
 
         /** @var int $result */
         $result = 0;
-
         /** @var UserAnswerModel[] */
         $userAnswers = $this->userAnswers->getAnswers($userId, $quizId);
-
         /** @var QuestionModel[] */
         $quizQuestions = $this->quizes->getQuestions($quizId);
-
         /** @var int $quizQuestionCount */
         $quizQuestionCount = count($quizQuestions);
-
         /** @var  AnswersModel[] */
         $quizAnswers = [];
 

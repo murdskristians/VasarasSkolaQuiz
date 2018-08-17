@@ -6,7 +6,9 @@
             "email": "murdskristians@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "ext-pdo": "*"
+    },
 
     "autoload": {
         "psr-4": {
