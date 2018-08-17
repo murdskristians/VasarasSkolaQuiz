@@ -1,17 +1,24 @@
 <?php
 
-include_once '../vendor/autoload.php';
+use Quiz\Controllers\IndexController;
 
-use Quiz\Repositories\UserDatabaseRepository;
-use Quiz\Repositories\UserRepository;
+require_once '../src/bootstrap.php';
 
-//$repo = new UserDatabaseRepository();
-//$repo->getConnection();
-//$data = $repo->getById(2);
-//
-//var_dump($data);
+define('BASE_DIR', __DIR__ . '/..');
+define('SOURCE_DIR', BASE_DIR . '/src');
+define('VIEW_DIR', SOURCE_DIR . '/views');
 
-$userRepo = new UserDatabaseRepository();
+$requestUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$requestString = substr($requestUrl, strlen($baseUrl));
 
-$user = $userRepo->getById(1);
-var_dump($user);
+$urlParams = explode('/', $requestString);
+
+$controllerName = ucfirst(array_shift($urlParams));
+$controllerName = $controllerNamespace . ($controllerName ? $controllerName : 'Index') . 'Controller';
+
+$actionName = strtolower(array_shift($urlParams));
+$actionName = ($actionName ? $actionName : 'index') . 'Action';
+
+/** @var IndexController $controller */
+$controller = new $controllerName;
+$controller->handleCall($actionName);
