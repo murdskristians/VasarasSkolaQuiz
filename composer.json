@@ -1,22 +1,24 @@
 {
-    "name": "vagrant/vagrant",
-    "authors": [
-        {
-            "name": "Kristians Murds",
-            "email": "murdskristians@gmail.com"
-        }
-    ],
-    "require": {
-        "ext-pdo": "*"
-    },
-
-    "autoload": {
-        "psr-4": {
-            "Quiz\\": "src/",
-            "Quiz\\Tests\\": "tests/"
-        }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^7.3"
+  "name": "vagrant/vagrant",
+  "authors": [
+    {
+      "name": "Kristians Murds",
+      "email": "murdskristians@gmail.com"
     }
+  ],
+  "require": {
+    "illuminate/support": "^5.6",
+    "php": ">=7.2",
+    "ext-json": "*",
+    "ext-pdo": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Quiz\\": "src/",
+      "Quiz\\Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.3"
+  }
 }

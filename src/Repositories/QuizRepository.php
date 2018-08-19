@@ -1,78 +1,23 @@
 <?php
 
+
 namespace Quiz\Repositories;
 
-use Quiz\Models\AnswersModel;
-use Quiz\Models\QuestionModel;
 use Quiz\Models\QuizModel;
 
-class QuizRepository
+class QuizRepository extends BaseRepository
 {
-    /** @var QuizModel[] */
-    private $quizes = [];
-    /** @var QuestionModel[] */
-    private $questions = [];
-    /** @var AnswersModel[] */
-    private $answers = [];
 
-    public function addQuiz(QuizModel $quiz)
+    /**Returns the corresponding model class name
+     * @return string */
+    public static function modelName(): string
     {
-        $this->quizes[] = $quiz;
+        return QuizModel::class;
     }
 
-    public function addQuestion(QuestionModel $question)
+    /** @return string */
+    public static function getTableName(): string
     {
-        $this->questions[] = $question;
-    }
-
-    public function addAnswers(AnswersModel $answer)
-    {
-        $this->answers[] = $answer;
-    }
-
-    /**
-     * @return QuizModel[]
-     */
-    public function getList(): array
-    {
-        $list = [];
-        foreach ($this->quizes as $quiz) {
-            $list[] = $quiz;
-        }
-        return $list;
-    }
-
-    public function getById(int $quizId): QuizModel
-    {
-        foreach ($this->quizes as $v) {
-            if ($v->id == $quizId) {
-                return $v;
-            }
-        }
-        return new QuizModel; // Returns empty model
-    }
-
-    public function getQuestions(int $quizId): array
-    {
-        $result = [];
-
-        foreach ($this->questions as $question) {
-            if ($question->quizId == $quizId) {
-                $result[] = $question;
-            }
-        }
-        return $result;
-    }
-
-    public function getAnswers(int $questionId): array
-    {
-        $answers = array();
-
-        foreach ($this->answers as $answer) {
-            if ($answer->questionId == $questionId) {
-                $answers[] = $answer;
-            }
-        }
-        return $answers;
+        return 'quizzes';
     }
 }

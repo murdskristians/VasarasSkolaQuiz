@@ -1,0 +1,42 @@
+<?php
+?>
+<html></html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="container">
+    <h1> Hello </h1>
+    <form id="user-form" method=POST action='ajax'>
+        First name:
+        <br>
+        <input type="text" id="name" name="name">
+        <br>
+        <button type="submit"> SUBMIT</button>
+    </form>
+</div>
+</body>
+
+<script type="text/javascript" charset="utf-8">
+    (function () {
+        let form = document.querySelector('#user-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            let inputs = form.querySelectorAll('input');
+            let formData = new FormData;
+
+            for (let i = 0; i < inputs.length; i++) {
+                formData.append(inputs[i].name, inputs[i].value);
+            }
+
+            let xhr = new XMLHttpRequest();
+            xhr.open(form.method, form.action, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log(xhr.response);
+                }
+            };
+            xhr.send(formData);
+        })
+    })();
+</script>

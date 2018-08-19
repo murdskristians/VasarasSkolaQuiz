@@ -5,45 +5,19 @@ namespace Quiz\Repositories;
 
 use Quiz\Models\UserModel;
 
-class UserRepository
+class UserRepository extends BaseRepository
 {
-    private $users = [];
-    private $idCounter = 0;
 
-    /**
-     * @param UserModel $user
-     * @return UserModel
-     */
-    public function saveOrCreate(UserModel $user): UserModel
+    /** Returns the corresponding model class name
+     * @return string */
+    public static function modelName(): string
     {
-        //Check if user exists
-        $existingUser = $this->getById($user->id);
-
-        if ($existingUser->isNew()) {
-            $this->idCounter += 1;
-            $existingUser->id = $this->idCounter;
-        }
-
-        $existingUser->name = $user->name;
-
-        $this->users[$existingUser->id] = $existingUser;
-
-        return $existingUser;
+        return UserModel::class;
     }
 
-    public function getById(int $userId): UserModel
+    /** @return string */
+    public static function getTableName(): string
     {
-        if (isset($this->users[$userId])) {
-            return $this->users[$userId];
-        }
-        return new UserModel;
-    }
-
-    public function getAll(int $userId): UserModel
-    {
-        if (isset($this->users[$userId])) {
-            return $this->users[$userId];
-        }
-        return new UserModel;
+        return 'users';
     }
 }
