@@ -1,0 +1,47 @@
+Arguments: 
+  /usr/bin/node /usr/bin/yarn
+
+PATH: 
+  /home/vagrant/.composer/vendor/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.7.0
+
+Node version: 
+  8.11.2
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: EPROTO: protocol error, symlink '../../../../babylon/bin/babylon.js' -> '/var/www/quiz/node_modules/@babel/core/node_modules/.bin/babylon'
+
+npm manifest: 
+  {
+    "name": "quiz",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+      "serve": "vue-cli-service serve",
+      "build": "vue-cli-service build",
+      "lint": "vue-cli-service lint"
+    },
+    "dependencies": {
+      "axios": "^0.18.0",
+      "vue": "^2.5.17",
+      "vue-axios": "^2.1.3",
+      "vuex": "^3.0.1"
+    },
+    "devDependencies": {
+      "@vue/cli-plugin-babel": "^3.0.0-rc.12",
+      "@vue/cli-service": "^3.0.0-rc.12",
+      "http-proxy-middleware": "^0.18.0",
+      "vue-template-compiler": "^2.5.17"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

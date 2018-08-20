@@ -1,11 +1,8 @@
 <?php
-
 namespace Quiz\Repositories;
-
 use Quiz\Interfaces\ConnectionInterface;
 use Quiz\Interfaces\RepositoryInterface;
 use Quiz\Models\BaseModel;
-
 abstract class BaseRepository implements RepositoryInterface
 {
     /** @var ConnectionInterface */
@@ -48,7 +45,6 @@ abstract class BaseRepository implements RepositoryInterface
         /** @var BaseModel $instance */
         $instance = new $class;
         $instance->setAttributes($attributes);
-        $this->prepareAttributes($instance);
         return $instance;
     }
     /**
@@ -102,9 +98,7 @@ abstract class BaseRepository implements RepositoryInterface
      */
     public function getAttributes($model): array
     {
-        if (!$model->attributes) {
-            $model = $this->prepareAttributes($model);
-        }
+        $model = $this->prepareAttributes($model);
         return $model->attributes;
     }
     /**

@@ -21,6 +21,7 @@ function run()
         ($controllerName ? $controllerName : 'Index') . 'Controller';
     $actionName = strtolower(array_shift($urlParams));
     $actionName = ($actionName ? $actionName : 'index') . 'Action';
+
     /** @var BaseController $controller */
     $controller = app($controllerName);
     $controller->handleCall($actionName);
