@@ -11,4 +11,9 @@ export default class Quiz {
 
         return quiz;
     }
+    toArray() {
+        return {
+
+        }
+    }
 }

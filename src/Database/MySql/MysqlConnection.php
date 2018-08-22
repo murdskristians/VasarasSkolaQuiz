@@ -47,6 +47,7 @@ class MysqlConnection implements ConnectionInterface
         $user = $config['user'] ?? null;
         $password = $config['password'] ?? null;
         $this->connection = new PDO($dsn, $user, $password);
+        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
     /**
      * @param string $table
