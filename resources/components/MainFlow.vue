@@ -1,7 +1,11 @@
 <template>
     <div v-if="activeQuestion">
-        <div>Hello, {{name}}!</div>
-        <QuestionItem />
+        <div class="main">
+            <div class="main__name">Hello, {{name}}!</div>
+            <div class="main__question">
+                <QuestionItem />
+            </div>
+        </div>
     </div>
 </template>
 

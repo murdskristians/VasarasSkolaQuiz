@@ -1,4 +1,5 @@
 <template>
+    <div class="main__answer"
     <a href="#" @click="onClick" :class="isActive ? 'active' : ''">{{ answer.answer }}</a>
 </template>
 

@@ -1,10 +1,11 @@
 import Api from '../api.js';
 import Quiz from '../models/model.quiz.js';
 import Question from '../models/model.question.js';
+import UserAnswer from '../models/model.userAnswer.js';
 
 class QuizRepository {
     constructor(){
-        this.quizApi = new Api('ajax'); //Mainīt ja ekspermentēju uz myAjax
+        this.quizApi = new Api('ajax');
     }
 
     getAllQuizzes() {
@@ -37,6 +38,18 @@ class QuizRepository {
                             response.data.result : Question.fromArray(response.data.result)
                         )
                     );
+                })
+                .catch(() => {
+                    debugger;
+                })
+        })
+    }
+
+    result(quizId) {
+        return new Promise(resolve => {
+            this.quizApi.get('getResult', {quizId} )
+                .then(response => {
+                    resolve(response.data.score);
                 })
                 .catch(() => {
                     debugger;

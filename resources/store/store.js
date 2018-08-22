@@ -3,8 +3,6 @@ import Vuex from 'vuex';
 import * as types from './mutations.js';
 
 import QuizRepository from '../repositories/repository.quiz.js';
-
-import Quiz from "../models/model.quiz.js";
 import Question from "../models/model.question.js";
 
 Vue.use(Vuex);
@@ -18,7 +16,7 @@ export default new Vuex.Store({
         result: '',
     },
     mutations: {
-        [types.SET_ACTIVE_QUIZ](state, quizId){
+        [types.SET_ACTIVE_QUIZ](state, quizId) {
             state.activeQuizId = quizId;
         },
         [types.SET_ALL_QUIZZES](state, quizzes) {
@@ -35,17 +33,16 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        setActiveQuizId(context, quizId){
+        setActiveQuizId(context, quizId) {
             context.commit(types.SET_ACTIVE_QUIZ, quizId)
         },
         setAllQuizzes(context) {
-            //TODO
             QuizRepository.getAllQuizzes()
                 .then(quizzes => {
                     context.commit(types.SET_ALL_QUIZZES, quizzes);
                 });
         },
-        setName (context, name) {
+        setName(context, name) {
             context.commit(types.SET_NAME, name);
         },
         start(context) {
@@ -66,9 +63,11 @@ export default new Vuex.Store({
 
                 })
         },
-        // restart (context) {
-        //     context.commit
-        //     context.commit
-        // }
+        result(context) {
+            QuizRepository.result(this.state.activeQuizId)
+                .then(result => {
+                    context.commit(types.SET_RESULTS, result);
+                })
+        }
     }
 })

@@ -34,23 +34,52 @@ abstract class BaseModel implements \JsonSerializable
     {
         $this->attributes = $attributes;
         foreach ($attributes as $key => $value) {
+            $key = static::snakeCaseToCamelCase($key);
             if (property_exists(static::class, $key)) {
                 $this->$key = $value;
             }
         }
     }
-//
-//    public function validate()
-//    {
-//        $rules = $this->rules();
-//
-//        foreach ($rules as $attribute => $rule) {
-//            $this->validator($this, $attribute, $rule);
-//        }
-//    }
-//
-//    private function rules()
-//    {
-//        return [];
-//    }
+
+    /**
+     * Transform a snake_case string to camelCase.
+     *
+     * @param string $snakeCased snake_cased string
+     * @return string camel cased string
+     */
+    public static function snakeCaseToCamelCase(string $snakeCased): string
+    {
+        $parts = explode('_', $snakeCased);
+        $out = array_shift($parts);
+        $out .= implode('', array_map(function ($part) {
+            return ucfirst($part);
+        }, $parts));
+        return $out;
+    }
+
+    /**
+     * Transform a camelCase string to snake_case.
+     *
+     * @param string $camelCased camel cased string
+     * @return string snake cased string
+     */
+    public static function camelCaseToSnakeCase(string $camelCased): string
+    {
+        if (strlen($camelCased) < 1) {
+            return '';
+        }
+        $parts = [];
+        $len = strlen($camelCased);
+        $part = $camelCased[0];
+        for ($i = 1; $i < $len; $i += 1) {
+            if (ctype_upper($camelCased[$i])) {
+                $parts[] = $part;
+                $part = strtolower($camelCased[$i]);
+            } else {
+                $part .= $camelCased[$i];
+            }
+        }
+        $parts[] = $part;
+        return implode('_', $parts);
+    }
 }

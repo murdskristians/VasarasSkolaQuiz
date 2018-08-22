@@ -1,17 +1,26 @@
 <template>
-    <div v-if="!activeQuestion && !result">
-        <TextInput v-model="name" label="Your name" />
-        <SelectDropdown v-model="activeQuizId" label="Pick your quiz" :options="getQuizzes()" />
-        <div>
-            <button @click="onStart">Start</button>
+    <div>
+        <div class="intro" v-if="!activeQuestion && !result">
+            <div class="intro__name">
+                <TextInput v-model="name" />
+            </div>
+<br />
+            <div class="intro__dropdown">
+                <SelectDropdown v-model="activeQuizId" label="Pick your quiz:" :options="getQuizzes()" />
+            </div>
+
+            <div>
+                <button class="intro__button" @click="onStart"> Start </button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import {mapActions} from 'vuex';
-    import TextInput from './forms/input.text';
-    import SelectDropdown from "./forms/select.dropdown";
+    import TextInput from './forms/input.text.vue';
+    import SelectDropdown from "./forms/select.dropdown.vue";
+
     export default {
         name: 'Intro',
         components: {SelectDropdown, TextInput},
@@ -66,7 +75,7 @@
                 this.start();
             },
             getQuizzes() {
-                return [].concat([{id: '', name: '---'}], this.allQuizzes.map(quiz => quiz.toArray()));
+                return [].concat([{id: '', name: '---'}], this.allQuizzes);
             }
         }),
         created() {

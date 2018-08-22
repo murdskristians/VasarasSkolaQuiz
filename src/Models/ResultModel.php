@@ -4,7 +4,7 @@
 namespace Quiz\Models;
 
 
-class ResultModel
+class ResultModel extends BaseModel
 {
     public $userId;
     public $quizId;

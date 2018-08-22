@@ -3,7 +3,7 @@
 namespace Quiz\Models;
 
 
-class AnswersModel
+class AnswersModel extends BaseModel
 {
     public $id;
     public $answer;

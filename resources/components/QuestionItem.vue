@@ -6,7 +6,7 @@
                 <AnswerItem :answer="answer" :on-answered="onAnswerPicked" :is-active="answerId === answer.id" />
             </li>
         </ul>
-        <button @click.stop="onAnswered" :disabled="!answerId">Next</button>
+        <button class="main__button" @click.stop="onAnswered" :disabled="!answerId">Next</button>
     </div>
 </template>
 <script>

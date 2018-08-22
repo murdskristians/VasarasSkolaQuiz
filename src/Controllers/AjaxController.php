@@ -2,6 +2,7 @@
 
 namespace Quiz\Controllers;
 
+use Quiz\Models\AnswersModel;
 use Quiz\Models\UserAnswerModel;
 use Quiz\Models\UserModel;
 use Quiz\Repositories\AnswerRepository;
@@ -49,6 +50,34 @@ class ajaxController extends BaseAjaxController
         }
     }
 
+    public function getAllQuizzesAction()
+    {
+        return $this->quizRepository->all();
+    }
+
+    public function indexAction()
+    {
+        return [
+            'name' => '',
+            'quizes' => [
+                [
+                    'id' => 1,
+                    'name' => 'Programming',
+                ],
+            ],
+        ];
+    }
+
+    public function startAction()
+    {
+        $_SESSION['quizId'] = $this->post->get('quizId');
+        $_SESSION['questionIndex'] = 1;
+
+        $this->saveUserAction();
+
+        return $this->getQuestion();
+    }
+
     public function saveUserAction()
     {
         $name = $this->post->get('name');
@@ -57,99 +86,79 @@ class ajaxController extends BaseAjaxController
         $user = $this->userRepository->create();
         $user->name = $name;
         $this->userRepository->save($user);
+        $_SESSION['userId'] = $user->id;
 
         return;
     }
 
-    public function getAllQuizzesAction()
+    public function getQuestion(int $index = 1)
     {
-        return $this->quizRepository->all();
+        $question = $this->questionRepository->one([
+            'quiz_id' => $_SESSION['quizId'],
+            'order_nr' => $index,
+        ]);
+
+        if ($question == null) {
+            return 'Finished! Your score is: ' . $this->getResult($_SESSION['quizId']);
+        }
+
+        $answers = $this->answerRepository->all(['question_id' => $question->id]);
+
+        $questionWithAnswers = [
+            'id' => $question->id,
+            'question' => $question->question,
+            'answers' => $answers,
+        ];
+
+        return $questionWithAnswers;
     }
 
-public function indexAction()
-{
-    return [
-        'name' => '',
-    'quizes' => [
-    [
-        'id' => 1,
-    'name' => 'Programming'
-],
-]
-];
-}
+    public function answerAction()
+    {
+        $this->saveUserAnswer();
 
-public function startAction()
-{
-    $quizId = $this->post->get('quizId');
-    $_SESSION['questionIndex'] = 0;
+        $index = isset($_SESSION['questionIndex']) ? (int)$_SESSION['questionIndex'] : 1;
+        //TODO ja nav uzstādīts tad throw exception
+        $index++;
+        $_SESSION['questionIndex'] = $index;
 
-    $this->saveUserAction();
-
-    return $this->getQuestion();
-}
-
-public function answerAction()
-{
-    $answerId = $this->post->get('answerId');
-
-    $index = isset($_SESSION['questionIndex']) ? (int)$_SESSION['questionIndex'] : 0;
-    $index++;
-    $_SESSION['questionIndex'] = $index;
-
-    return $this->getQuestion($index);
-}
-
-public function getQuestion(int $index = 0)
-{
-    //$questions = $this->questionRepository->all(); //NESTRĀDĀ
-    $questions = [
-        [
-            'id' => 1,
-    'question' => 'What is the most basic language Microsoft made?',
-    'answers' => [
-    [
-        'id' => 1,
-    'answer' => 'Visual Basic'
-],
-    [
-        'id' => 2,
-    'answer' => 'DirectX'
-],
-    [
-        'id' => 3,
-    'answer' => 'Batch'
-],
-    [
-        'id' => 4,
-    'answer' => 'C++'
-],
-],
-],
-    [
-        'id' => 2,
-    'question' => 'What does HTML stand for?',
-    'answers' => [
-    [
-        'id' => 1,
-    'answer' => 'Hyper Text Markup Language'
-],
-    [
-        'id' => 2,
-    'answer' => 'Home Tool Markup Language'
-],
-    [
-        'id' => 3,
-    'answer' => 'Hyperlinks and Text Markup Language'
-],
-],
-]
-];
-
-    if (!isset($questions[$index])) {
-        return 'Good you have done!';
+        return $this->getQuestion($index);
     }
 
-    return $questions[$index];
-}
+    public function saveUserAnswer(): void
+    {
+        $userId = $_SESSION['userId'];
+        $quizId = $_SESSION['quizId'];
+        $answerId = $this->post->get('answerId');
+
+        $answer = $this->answerRepository->getById($answerId);
+        $questionId = $answer->questionId;
+
+        $userAnswerModel = new UserAnswerModel();
+        $userAnswerModel->userId = $userId;
+        $userAnswerModel->quizId = $quizId;
+        $userAnswerModel->answerId = $answerId;
+        $userAnswerModel->questionId = $questionId;
+
+        $this->userAnswerRepository->save($userAnswerModel);
+    }
+
+    private function getResult( int $quizId ): int
+    {
+        $score = 0;
+        $userId = $_SESSION["userId"];
+
+        /** @var UserAnswerModel[] $userAnswers */
+        $userAnswers = $this->userAnswerRepository->all(['quiz_id' => $quizId, 'user_id' => $userId]);
+
+        foreach ($userAnswers as $userAnswer)
+        {
+
+            /** @var AnswersModel $answer */
+            $answer = $this->answerRepository->getById($userAnswer->answerId);
+            if ($answer->isCorrect == 1) $score++;
+        }
+
+        return  $score;
+    }
 }

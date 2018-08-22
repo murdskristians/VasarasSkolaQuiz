@@ -110,8 +110,9 @@ abstract class BaseRepository implements RepositoryInterface
         $columns = $this->connection->fetchColumns(static::getTableName());
         $attributes = [];
         foreach ($columns as $column) {
-            if (property_exists(static::modelName(), $column)) {
-                $attributes[$column] = $model->{$column};
+            $key = BaseModel::snakeCaseToCamelCase($column);
+            if (property_exists(static::modelName(), $key)) {
+                $attributes[$column] = $model->{$key};
             }
         }
         $model->attributes = $attributes;
