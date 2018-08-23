@@ -1,7 +1,7 @@
 <template>
     <div>
         <label>{{label}}</label>
-        <input placeholder="Enter your name here" type="text" v-bind:value="value" v-on:input="$emit('input', $event.target.value)" />
+        <input class="intro__name form-control" placeholder="Enter your name here" type="text" v-bind:value="value" v-on:input="$emit('input', $event.target.value)" />
     </div>
 </template>
 <script>

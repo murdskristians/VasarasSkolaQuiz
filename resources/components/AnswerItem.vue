@@ -1,6 +1,7 @@
 <template>
-    <div class="main__answer"
-    <a href="#" @click="onClick" :class="isActive ? 'active' : ''">{{ answer.answer }}</a>
+    <button @click="onClick" :class="{ main__answerButton: true, active: isActive }">
+        {{ answer.answer }}
+    </button>
 </template>
 
 <script>

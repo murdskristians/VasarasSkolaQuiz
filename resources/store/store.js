@@ -13,7 +13,9 @@ export default new Vuex.Store({
         activeQuizId: null,
         allQuizzes: [],
         activeQuestion: null,
-        result: '',
+        result: null,
+        questionCount: null,
+        currentQuestion: 0
     },
     mutations: {
         [types.SET_ACTIVE_QUIZ](state, quizId) {
@@ -31,6 +33,12 @@ export default new Vuex.Store({
         [types.SET_RESULTS](state, result) {
             state.result = result;
         },
+        [types.SET_QUESTION_COUNT](state, questionCount) {
+            state.questionCount = questionCount;
+        },
+        [types.SET_CURRENT_QUESTION](state, currentQuestion) {
+            state.currentQuestion = currentQuestion;
+        },
     },
     actions: {
         setActiveQuizId(context, quizId) {
@@ -47,11 +55,14 @@ export default new Vuex.Store({
         },
         start(context) {
             QuizRepository.start(this.state.name, this.state.activeQuizId)
-                .then(question => {
+                .then(([questionCount, question]) => {
+                    context.commit(types.SET_QUESTION_COUNT, questionCount);
                     context.commit(types.SET_QUESTION, question);
                 })
         },
         answer(context, answerId) {
+            context.commit(types.SET_CURRENT_QUESTION, context.state.currentQuestion + 1);
+
             QuizRepository.answer(answerId)
                 .then(questionOrResults => {
                     if (questionOrResults instanceof Question) {
@@ -68,6 +79,7 @@ export default new Vuex.Store({
                 .then(result => {
                     context.commit(types.SET_RESULTS, result);
                 })
-        }
+        },
+
     }
 })

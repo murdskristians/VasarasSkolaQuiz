@@ -1,12 +1,16 @@
 <template>
     <div>
-        <h1>{{question.question}}</h1>
-        <ul>
-            <li v-for="answer in question.answers">
-                <AnswerItem :answer="answer" :on-answered="onAnswerPicked" :is-active="answerId === answer.id" />
-            </li>
-        </ul>
+        <h1 class="main__question">{{question.question}}</h1>
+                <AnswerItem :answer="answer" :on-answered="onAnswerPicked" :is-active="answerId === answer.id" v-for="answer in question.answers"/>
+
+        <div class="progress main__progress">
+            <div class="progress-bar progress-bar-striped bg-success progress-bar-animated active" role="progressbar"
+                 :style="{ width: percent + '%' }">
+                <span v-if="percent != 0">{{percent}}%</span>
+            </div>
+        </div>
         <button class="main__button" @click.stop="onAnswered" :disabled="!answerId">Next</button>
+
     </div>
 </template>
 <script>
@@ -24,6 +28,14 @@
                 get() {
                     return this.$store.state.activeQuestion;
                 }
+            },
+            questionCount: {
+                get() {
+                    return this.$store.state.questionCount;
+                }
+            },
+            percent() {
+                return Math.round(this.$store.state.currentQuestion/this.$store.state.questionCount*100)
             }
         },
         methods: Object.assign({}, mapActions([

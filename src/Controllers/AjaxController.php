@@ -70,12 +70,16 @@ class ajaxController extends BaseAjaxController
 
     public function startAction()
     {
-        $_SESSION['quizId'] = $this->post->get('quizId');
+        $quizId = $this->post->get('quizId');
+        $_SESSION['quizId'] = $quizId;
         $_SESSION['questionIndex'] = 1;
+
+        $allQuestions = $this->questionRepository->all(['quiz_id'=>$quizId]);
+        $_SESSION['totalQuestions'] = count($allQuestions);
 
         $this->saveUserAction();
 
-        return $this->getQuestion();
+        return [$_SESSION['totalQuestions'], $this->getQuestion()];
     }
 
     public function saveUserAction()
@@ -99,7 +103,7 @@ class ajaxController extends BaseAjaxController
         ]);
 
         if ($question == null) {
-            return 'Finished! Your score is: ' . $this->getResult($_SESSION['quizId']);
+            return $this->getResult($_SESSION['quizId']);
         }
 
         $answers = $this->answerRepository->all(['question_id' => $question->id]);
@@ -153,7 +157,6 @@ class ajaxController extends BaseAjaxController
 
         foreach ($userAnswers as $userAnswer)
         {
-
             /** @var AnswersModel $answer */
             $answer = $this->answerRepository->getById($userAnswer->answerId);
             if ($answer->isCorrect == 1) $score++;

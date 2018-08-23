@@ -1,7 +1,7 @@
 <template>
     <div>
         <label>{{ label }}</label> &emsp;
-        <select v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
+        <select class="form-control" v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
             <option v-for="option in options" :value="option.id">{{ option.name }}</option>
         </select>
     </div>

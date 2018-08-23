@@ -3,19 +3,21 @@
 body {
   font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
-  font-size: 22px;
-
+  font-size: 15px;
+  background-color: lightgray;
 }
 
 .wrapper {
-  position: fixed;
+  position: relative;
   text-align: center;
   width: 50%;
-  top: 10%;
+  margin-top: 3%;
   margin-left: 25%;
   padding: 2em;
   border: 3px solid rgb(103, 206, 35);
   border-radius: 15px;
+  background-color: white;
+  min-width: 550px;
 }
 .intro {
   font-size: 50px;
@@ -24,7 +26,8 @@ body {
     font-size: 20px;
   }
   &__dropdown {
-    font-size: 30px;
+    font-size: 20px;
+    text-align: center;
   }
   &__button {
     background-color: white;
@@ -49,15 +52,41 @@ body {
 .main {
   &__name {
     text-align: left;
-    font-size: 20px;
+    font-size: 12px;
     font-style: italic;
+    font-weight: lighter;
+    margin-top: 0px;
+    margin-bottom: 3%;
   }
   &__question {
-    font-size: 30px;
+    font-size: 25px;
+    font-family: 'Gaegu', "Sans-serif", sans-serif;
   }
-  &__answer {
-    font-size: 10px;
+  &__answerButton {
+    background-color: lightgreen;
+    width: 45%;
+    height: 70px;
+    border: none;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    font-style: italic;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    border-radius: 4px;
+    margin: 10px;
+    vertical-align: top;
+
+    &.active {
+      background-color: darken(lightgreen, 20%);
+    }
+    &:hover {
+      background-color: lighten(lightgreen, 20%);
+    }
   }
+
   &__button {
     background-color: white;
     color: black;
@@ -65,16 +94,23 @@ body {
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    display: block;
     font-size: 16px;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     border-radius: 4px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
   }
   &__button:hover {
     background-color: #4CAF50; /* Green */
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     color: white;
+  }
+  &__progress {
+    height: 20px;
+    margin-top: 30px;
   }
 }
 
@@ -101,16 +137,39 @@ body {
     color: white;
   }
 }
+.divider-text {
+  position: relative;
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.divider-text span {
+  padding: 7px;
+  font-size: 12px;
+  position: relative;
+  z-index: 2;
+}
+.divider-text:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  top: 55%;
+  left: 0;
+  z-index: 1;
+}
+
+.btn-facebook {
+  background-color: #405D9D;
+  color: #fff;
+}
+.btn-twitter {
+  background-color: #42AEEC;
+  color: #fff;
+}
 li {
   list-style-type: none;
   text-align: left;
 }
-select {
-  margin: 20px;
-  width: 50%;
-  padding: 16px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: #f1f1f1;
-}
+
 

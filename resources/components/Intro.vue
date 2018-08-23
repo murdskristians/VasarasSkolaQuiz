@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="intro" v-if="!activeQuestion && !result">
-            <div class="intro__name">
+        <div class="intro" v-if="!activeQuestion && result === null">
+            <div >
                 <TextInput v-model="name" />
             </div>
 <br />
             <div class="intro__dropdown">
-                <SelectDropdown v-model="activeQuizId" label="Pick your quiz:" :options="getQuizzes()" />
+                <SelectDropdown v-model="activeQuizId" label="Choose your quiz below:" :options="getQuizzes()" />
             </div>
 
             <div>

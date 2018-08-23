@@ -22,8 +22,9 @@ class QuizRepository {
         return new Promise(resolve => {
             this.quizApi.post('start', {name,quizId})
                 .then(response => {
-                    let questions = Question.fromArray(response.data.result);
-                    resolve(questions);
+                    let questions = Question.fromArray(response.data.result[1]);
+                    let questionCount = response.data.result[0];
+                    resolve([questionCount, questions]);
                 })
                 .catch(() => alert('Oh nooo!!!'));
         })
@@ -34,13 +35,14 @@ class QuizRepository {
             this.quizApi.post('answer', {answerId} )
                 .then(response => {
                     resolve(
-                        (typeof response.data.result === 'string'?
+                        (typeof response.data.result === 'number'?
                             response.data.result : Question.fromArray(response.data.result)
                         )
                     );
                 })
-                .catch(() => {
-                    debugger;
+                .catch((err) => {
+                    console.error(err);
+                    // debugger;
                 })
         })
     }
